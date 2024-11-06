@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: bzj-starter
+  profiles:
+    active: prod
+  # upload file
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+logging:
+  level:
+    root: INFO
+
+server:
+  servlet:
+    context-path: /bzj-starter # web context path
+    encoding: # encoding
+      charset: utf-8
+      force: true
+  port: 0 # web port, 0 is random port
+
+
+
+
