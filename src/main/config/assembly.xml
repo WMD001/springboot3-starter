@@ -12,6 +12,7 @@
         <fileSet>
             <directory>src/main/bin</directory>
             <outputDirectory>${file.separator}bin</outputDirectory>
+            <filtered>true</filtered>
             <includes>
                 <include>*</include>
             </includes>

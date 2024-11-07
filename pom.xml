@@ -32,6 +32,30 @@
 
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <package.name>bzj-starter</package.name>
+                <run.env>dev</run.env>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <package.name>bzj-starter</package.name>
+                <run.env>test</run.env>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <package.name>bzj-starter</package.name>
+                <run.env>prod</run.env>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <finalName>bzj-starter</finalName>
         <plugins>
