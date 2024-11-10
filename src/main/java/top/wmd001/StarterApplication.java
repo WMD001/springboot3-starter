@@ -1,13 +1,13 @@
-package com.xdtech.bzj;
+package top.wmd001;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BzjStarterApplication {
+public class StarterApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BzjStarterApplication.class, args);
+        SpringApplication.run(StarterApplication.class, args);
     }
 
 }

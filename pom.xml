@@ -3,14 +3,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.xdtech</groupId>
-        <artifactId>bzj-starter-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.11</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <artifactId>bzj-starter</artifactId>
+    <groupId>tom.wmd001</groupId>
+    <artifactId>starter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bzj-starter</name>
-    <description>A bzj starter project.</description>
+    <name>starter</name>
+    <description>Spingboot3 starter project.</description>
     <packaging>jar</packaging>
     <url/>
     <licenses>
@@ -29,35 +31,38 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>annotationProcessor</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <profiles>
         <profile>
             <id>dev</id>
             <properties>
-                <package.name>bzj-starter</package.name>
+                <package.name>starter</package.name>
                 <run.env>dev</run.env>
-            </properties>
-        </profile>
-        <profile>
-            <id>test</id>
-            <properties>
-                <package.name>bzj-starter</package.name>
-                <run.env>test</run.env>
-            </properties>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <properties>
-                <package.name>bzj-starter</package.name>
-                <run.env>prod</run.env>
             </properties>
         </profile>
     </profiles>
 
     <build>
-        <finalName>bzj-starter</finalName>
+        <finalName>starter</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
