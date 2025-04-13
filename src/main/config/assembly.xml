@@ -35,5 +35,20 @@
                 <include>*.jar</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}/lib</directory>
+            <outputDirectory>${file.separator}lib</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}/</directory>
+            <outputDirectory>${file.separator}config</outputDirectory>
+            <includes>
+                <include>md5.txt</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../bzj-RegionServiceUI/dist</directory>
+            <outputDirectory>${file.separator}static</outputDirectory>
+        </fileSet>
     </fileSets>
 </assembly>

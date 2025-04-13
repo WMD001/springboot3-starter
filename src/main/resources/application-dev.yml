@@ -1,1 +1,4 @@
 # dev env config
+
+server:
+  port: 9898

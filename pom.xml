@@ -29,6 +29,7 @@
     </scm>
     <properties>
         <java.version>17</java.version>
+        <main.class>top.wmd001.StarterApplication</main.class>
     </properties>
     <dependencies>
         <dependency>
@@ -49,33 +50,119 @@
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.22</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
     </dependencies>
 
     <profiles>
         <profile>
             <id>dev</id>
             <properties>
-                <package.name>starter</package.name>
+                <package.name>app.dev</package.name>
                 <run.env>dev</run.env>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <package.name>app.test</package.name>
+                <run.env>test</run.env>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <package.name>app.prod</package.name>
+                <run.env>prod</run.env>
             </properties>
         </profile>
     </profiles>
 
     <build>
-        <finalName>starter</finalName>
+        <finalName>app</finalName>
         <plugins>
+            <!-- 配置 maven-jar-plugin 生成瘦JAR -->
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
                 <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.xdtech.BzjStarterApplication</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
+
+            <!-- 配置 maven-dependency-plugin 复制依赖到 lib 文件夹 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 配置 maven-antrun-plugin 生成 MD5 值 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-md5</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- 生成当前时间 -->
+                                <tstamp>
+                                    <format property="current.time" pattern="yyyy-MM-dd'T'HH:mm:ss"/>
+                                </tstamp>
+                                <echo message="Current Time: ${current.time}"/>
+
+                                <!-- 生成 MD5 值 -->
+                                <checksum file="${project.build.directory}/${project.build.finalName}.jar" algorithm="MD5" property="jar.md5"/>
+                                <echo message="MD5 of JAR: ${jar.md5}"/>
+
+                                <!-- 将 MD5 值写入文件 -->
+                                <echo file="${project.build.directory}/md5.txt">${jar.md5}</echo>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <!-- 配置 maven-assembly-plugin 打包依赖和瘦JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -88,8 +175,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>assembly</id>
-                        <!--    绑定到package阶段    -->
+                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
@@ -99,5 +185,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

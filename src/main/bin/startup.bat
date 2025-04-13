@@ -1,7 +1,6 @@
 @echo off
 
-set "JAR_NAME=${package.name}"
-set JAVA_OPTS=-server -Xms2g -Xmx2g -Dfile.encoding=GBK -Dspring.profiles.active=${run.env}
+set JAVA_OPTS=-server -Xms2g -Xmx2g -Dfile.encoding=GBK
 
 rem get RUN_HOME
 set "CURRENT_DIR=%cd%"
@@ -9,7 +8,7 @@ set "RUN_HOME=%CURRENT_DIR%"
 cd ..
 set "RUN_HOME=%cd%"
 cd "%CURRENT_DIR%"
-set "PACKAGE_NAME=%RUN_HOME%\lib\%JAR_NAME%.jar"
+set "MAIN_CLASS=${main.class}"
 
 rem Otherwise either JRE or JDK are fine
 if not "%JRE_HOME%" == "" goto gotJreHome
@@ -35,7 +34,7 @@ echo This environment variable is needed to run this program
 goto exit
 
 
-:okjava
+:okJava
 rem Set standard command for invoking Java.
 rem Also note the quoting as JRE_HOME may contain spaces.
 set "_RUNJAVA=%JRE_HOME%\bin\java.exe"
@@ -48,12 +47,16 @@ set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.util=ALL-UNN
 set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.base/java.util.concurrent=ALL-UNNAMED"
 set "JDK_JAVA_OPTIONS=%JDK_JAVA_OPTIONS% --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED"
 
+set "SPRING_OPTIONS=%SPRING_OPTIONS% -Dspring.profiles.active=${run.env}"
+set "SPRING_OPTIONS=%SPRING_OPTIONS% -Dspring.config.location=%RUN_HOME%\config\"
+set "SPRING_OPTIONS=%SPRING_OPTIONS% -Dspring.web.resources.static-locations=file:%RUN_HOME%\static\"
+set "SPRING_OPTIONS=%SPRING_OPTIONS% -Dlogging.file.path=%RUN_HOME%\logs\"
 
 echo Using RUN_HOME:     %RUN_HOME%
 echo Using JRE_HOME:     %JRE_HOME%
 echo Using JAVA_HOME:    %JAVA_HOME%
 
-%_RUNJAVA% %JAVA_OPTS% -jar %PACKAGE_NAME%
+%_RUNJAVA% %JAVA_OPTS% %JDK_JAVA_OPTIONS% %SPRING_OPTIONS%  -cp "%RUN_HOME%/lib/*" %MAIN_CLASS%
 
 :exit
-exit /b 1
+exit /b 01
